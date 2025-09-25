@@ -567,22 +567,3 @@ game.Players.LocalPlayer.multiJumpCount.Value=Value
         function()
             game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(178.33023071289062, 91245.96875, 152.53775024414062)
         end)
-        
-   local XKHub = window:Tab("99天", "118120943273583")
-    local JIUJIU = XKHub:section("99天脚本", true)
-    
-   JIUJIU:Button(
-        "虚空汉化",
-        function()
-            loadstring(game:HttpGet("https://raw.githubusercontent.com/ke9460394-dot/ugik/refs/heads/main/99%E5%A4%9C%E8%99%9A%E7%A9%BA.txt"))()
-        end)
-        
-   local XKHub = window:Tab("俄亥俄州", "118120943273583")
-    local CNM = XKHub:section("俄亥俄州脚本", true)
-    
-   CNM:Button(
-        "普通版熊脚本",
-        function()
-            loadstring(game:HttpGet("https://raw.githubusercontent.com/Bear-script0/OHIO/main/%E7%86%8A%E8%84%9A%E6%9C%AC%E6%99%AE%E9%80%9A%E7%89%88"))()
-        end)
-      
