@@ -1,0 +1,588 @@
+local UserGui = Instance.new("ScreenGui", game.CoreGui)
+local UserLabel = Instance.new("TextLabel", UserGui)
+local UIGradient = Instance.new("UIGradient")
+
+UserGui.Name = "UserGui"
+UserGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+UserGui.Enabled = true
+UserLabel.Name = "UserLabel"
+UserLabel.BackgroundColor3 = Color3.new(1, 1, 1)
+UserLabel.BackgroundTransparency = 1
+UserLabel.BorderColor3 = Color3.new(0, 0, 0)
+UserLabel.Position = UDim2.new(0.80, 0.80, 0.00090, 0)
+UserLabel.Size = UDim2.new(0, 135, 0, 50)
+UserLabel.Font = Enum.Font.GothamSemibold
+UserLabel.Text = "尊敬的："..game.Players.LocalPlayer.Character.Name.."猫帝脚本用户"
+UserLabel.TextColor3 = Color3.new(1, 1, 1)
+UserLabel.TextScaled = true
+UserLabel.TextSize = 14
+UserLabel.TextWrapped = true
+UserLabel.Visible = true
+
+UIGradient.Color = ColorSequence.new{
+    ColorSequenceKeypoint.new(0.00, Color3.fromRGB(255, 0, 0)),
+    ColorSequenceKeypoint.new(0.10, Color3.fromRGB(255, 127, 0)),
+    ColorSequenceKeypoint.new(0.20, Color3.fromRGB(255, 255, 0)),
+    ColorSequenceKeypoint.new(0.30, Color3.fromRGB(0, 255, 0)),
+    ColorSequenceKeypoint.new(0.40, Color3.fromRGB(0, 255, 255)),
+    ColorSequenceKeypoint.new(0.50, Color3.fromRGB(0, 0, 255)),
+    ColorSequenceKeypoint.new(0.60, Color3.fromRGB(139, 0, 255)),
+    ColorSequenceKeypoint.new(0.70, Color3.fromRGB(255, 0, 0)),
+    ColorSequenceKeypoint.new(0.80, Color3.fromRGB(255, 127, 0)),
+    ColorSequenceKeypoint.new(0.90, Color3.fromRGB(255, 255, 0)),
+    ColorSequenceKeypoint.new(1.00, Color3.fromRGB(0, 255, 0))
+}
+UIGradient.Rotation = 10
+UIGradient.Parent = UserLabel
+
+local TweenService = game:GetService("TweenService")
+local tweeninfo = TweenInfo.new(7, Enum.EasingStyle.Linear, Enum.EasingDirection.In, -1)
+local tween = TweenService:Create(UIGradient, tweeninfo, {Rotation = 360})
+tween:Play()
+
+local RainbowTitleModule = {}
+
+function RainbowTitleModule.Init(player, titleText)
+    local moduleState = {
+        Enabled = false,
+        TitleText = titleText,
+        Connection = nil,
+        BillboardGui = nil
+    }
+
+    local function addTitleToCharacter(character)
+        if not moduleState.Enabled then return end
+        
+        local head = character:FindFirstChild("Head") or character:WaitForChild("Head")
+        local old = head:FindFirstChild("PlayerTitle")
+        if old then old:Destroy() end
+        
+        local billboardGui = Instance.new("BillboardGui")
+        billboardGui.Name = "PlayerTitle"
+        billboardGui.Adornee = head
+        billboardGui.Size = UDim2.new(4, 0, 1, 0)
+        billboardGui.StudsOffset = Vector3.new(0, 2, 0)
+        billboardGui.AlwaysOnTop = true
+        billboardGui.MaxDistance = 1000
+        
+        local textLabel = Instance.new("TextLabel")
+        textLabel.Size = UDim2.new(1, 0, 1, 0)
+        textLabel.BackgroundTransparency = 1
+        textLabel.Text = moduleState.TitleText
+        textLabel.TextScaled = true
+        textLabel.Font = Enum.Font.GothamBold
+        textLabel.TextWrapped = true
+        textLabel.Parent = billboardGui
+        
+        local stroke = Instance.new("UIStroke")
+        stroke.Thickness = 1
+        stroke.Color = Color3.new(1, 1, 1)
+        stroke.Parent = textLabel
+        
+        local gradient = Instance.new("UIGradient")
+        gradient.Rotation = 90
+        gradient.Parent = textLabel
+        
+        moduleState.Connection = game:GetService("RunService").RenderStepped:Connect(function()
+            local time = tick() * 0.5
+            gradient.Color = ColorSequence.new({
+                ColorSequenceKeypoint.new(0, Color3.fromHSV(time % 1, 1, 1)),
+                ColorSequenceKeypoint.new(0.2, Color3.fromHSV((time + 0.2) % 1, 1, 1)),
+                ColorSequenceKeypoint.new(0.4, Color3.fromHSV((time + 0.4) % 1, 1, 1)),
+                ColorSequenceKeypoint.new(0.6, Color3.fromHSV((time + 0.6) % 1, 1, 1)),
+                ColorSequenceKeypoint.new(0.8, Color3.fromHSV((time + 0.8) % 1, 1, 1)),
+                ColorSequenceKeypoint.new(1, Color3.fromHSV(time % 1, 1, 1))
+            })
+        end)
+        
+        billboardGui.AncestryChanged:Connect(function()
+            if not billboardGui:IsDescendantOf(game) then
+                if moduleState.Connection then 
+                    moduleState.Connection:Disconnect()
+                    moduleState.Connection = nil
+                end
+            end
+        end)
+        
+        billboardGui.Parent = head
+        moduleState.BillboardGui = billboardGui
+    end
+
+    function moduleState:Toggle(state)
+        self.Enabled = state
+        if state then
+            local character = player.Character or player.CharacterAdded:Wait()
+            addTitleToCharacter(character)
+            player.CharacterAdded:Connect(addTitleToCharacter)
+        else
+            if self.Connection then
+                self.Connection:Disconnect()
+                self.Connection = nil
+            end
+            if self.BillboardGui then
+                self.BillboardGui:Destroy()
+                self.BillboardGui = nil
+            end
+        end
+    end
+
+    return moduleState
+end
+
+local Players = game:GetService("Players")
+local titleModule = RainbowTitleModule.Init(Players.LocalPlayer, "猫帝脚本用户")
+
+titleModule:Toggle(true)
+
+        local library = loadstring(game:HttpGet(('https://github.com/DevSloPo/Auto/raw/main/Ware-obfuscated.lua')))()
+
+    local window = library:new("猫帝")
+    local XKHub = window:Tab("关于", "118120943273583")
+    local XK = XKHub:section("信息", true)
+    
+    XK:Label("再次点击关于展开,倒卖死人家")
+    
+    XK:Label("V2内容")
+    
+    XK:Label("qq群947637628")
+    
+    local XKHub = window:Tab("通用", "118120943273583")
+    local XKNB = XKHub:section("脚本QWQ", true)
+    
+    XKNB:Label("感谢使用脚本")
+     
+    XKNB:Slider("速度", "", 16, 0, 1000, false, function(Value)
+game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = Value
+    end)
+    
+    XKNB:Slider("跳跃", "", 50, 0, 1000, false, function(Value)
+game.Players.LocalPlayer.Character.Humanoid.JumpPower = Value
+    end)
+    
+   XKNB:Slider("重力", "", 196, 0, 1000, false, function(Value)
+game.Workspace.Gravity = Value
+    end) 
+    
+    XKNB:Button(
+        "清除速度",
+        function()
+            game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = 16
+        end)
+        
+     XKNB:Button(
+        "速度50",
+        function()
+            game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = 50
+        end)
+        
+    XKNB:Button(
+        "速度150",
+        function()
+            game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = 150
+        end)
+        
+    XKNB:Button(
+        "速度300",
+        function()
+            game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = 300
+        end)
+        
+    XKNB:Button(
+        "速度500",
+        function()
+            game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = 500
+        end)
+        
+    XKNB:Button(
+        "速度750",
+        function()
+            game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = 750
+        end)
+        
+    XKNB:Button(
+        "1000",
+        function()
+            game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = 1000
+        end)
+        
+    XKNB:Label("微调速度")
+    
+    XKNB:Button(
+        "速度25",
+        function()
+            game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = 25
+        end)
+        
+    XKNB:Button(
+        "速度30",
+        function()
+            game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = 30
+        end)
+        
+    XKNB:Button(
+        "速度40",
+        function()
+            game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = 40
+        end)
+        
+    XKNB:Label("结束")
+    
+     XKNB:Button(
+        "清除跳跃",
+        function()
+       game.Players.LocalPlayer.Character.Humanoid.JumpPower = 50     
+        end)
+        
+     XKNB:Button(
+        "跳跃100",
+        function()
+            game.Players.LocalPlayer.Character.Humanoid.JumpPower = 100
+        end)
+        
+    XKNB:Button(
+        "跳跃200",
+        function()
+            game.Players.LocalPlayer.Character.Humanoid.JumpPower = 200
+        end)
+        
+    XKNB:Button(
+        "跳跃300",
+        function()
+            game.Players.LocalPlayer.Character.Humanoid.JumpPower = 300
+        end)
+        
+    XKNB:Button(
+        "跳跃500",
+        function()
+            game.Players.LocalPlayer.Character.Humanoid.JumpPower = 500
+        end)
+        
+    XKNB:Button(
+        "跳跃750",
+        function()
+            game.Players.LocalPlayer.Character.Humanoid.JumpPower = 750
+        end)
+        
+    XKNB:Button(
+        "跳跃1000",
+        function()
+            game.Players.LocalPlayer.Character.Humanoid.JumpPower = 1000
+        end)
+        
+    XKNB:Label("微调跳跃")
+    
+    XKNB:Button(
+        "跳跃55",
+        function()
+            game.Players.LocalPlayer.Character.Humanoid.JumpPower = 55
+        end)
+        
+    XKNB:Button(
+        "跳跃60",
+        function()
+            game.Players.LocalPlayer.Character.Humanoid.JumpPower = 60
+        end)
+        
+    XKNB:Button(
+        "跳跃70",
+        function()
+            game.Players.LocalPlayer.Character.Humanoid.JumpPower = 70
+        end)
+        
+    XKNB:Label("结束")
+    
+    XKNB:Button(
+        "IY",
+        function()
+            loadstring(game:HttpGet(('https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source'),true))()
+        end)
+        
+    XKNB:Button(
+        "飞行",
+        function()
+            loadstring(game:HttpGet("https://raw.githubusercontent.com/iqiqiqezbro/sedfksijfmlhymaodi/8e35b0bdd6f1c4c90c9657699f565dcd96dff272/%E7%8C%AB%E5%B8%9DFLY"))()
+        end)
+        
+    XKNB:Button(
+        "FE传送",
+        function()
+            mouse = game.Players.LocalPlayer:GetMouse() tool = Instance.new("Tool") tool.RequiresHandle = false tool.Name = "[FE] TELEPORT TOOL" tool.Activated:connect(function() local pos = mouse.Hit+Vector3.new(0,2.5,0) pos = CFrame.new(pos.X,pos.Y,pos.Z) game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = pos end) tool.Parent = game.Players.LocalPlayer.Backpack
+        end)
+        
+    XKNB:Button(
+        "假延迟",
+        function()
+            loadstring(game:HttpGet("https://raw.githubusercontent.com/RENZXW/RENZXW-SCRIPTS/main/fakeLAGRENZXW.txt"))()
+        end)
+        
+    XKNB:Button(
+        "键盘",
+        function()
+            loadstring(game:HttpGet("https://raw.githubusercontent.com/advxzivhsjjdhxhsidifvsh/mobkeyboard/main/main.txt", true))()
+        end)
+        
+    XKNB:Button(
+        "透视",
+        function()
+            if Value then
+		    game.Lighting.Ambient = Color3.new(1, 1, 1)
+		else
+		    game.Lighting.Ambient = Color3.new(0, 0, 0)
+		end
+        end)
+        
+    XKNB:Button(
+        "跑墙",
+        function()
+            loadstring(game:HttpGet("https://pastebin.com/raw/zXk4Rq2r"))()
+        end)
+        
+    XKNB:Button(
+        "自杀",
+        function()
+            game.Players.LocalPlayer.Character.Humanoid.Health=0
+        end)
+        
+    XKNB:Button(
+        "飞车",
+        function()
+            loadstring(game:HttpGet("https://pastebin.com/raw/63T0fkBm"))()
+        end)
+        
+    XKNB:Button(
+        "无限跳跃",
+        function()
+            loadstring(game:HttpGet("https://pastebin.com/raw/zXk4Rq2r"))()
+        end)
+        
+    XKNB:Button(
+        "FE动作",
+        function()
+            loadstring(game:HttpGet("https://pastebin.com/raw/Zj4NnKs6"))()
+        end)
+        
+    XKNB:Button(
+        "工具包",
+        function()
+           loadstring(game:HttpGet("https://cdn.wearedevs.net/scripts/BTools.txt"))() 
+        end)
+
+    local XKHub = window:Tab("忍者传奇", "118120943273583")
+    local md = XKHub:section("脚本QWQ", true)
+    
+    md:Toggle("自动挥剑", "", false, function(state)
+while true do
+local args = {
+	"swingKatana"
+}
+game:GetService("Players").LocalPlayer:WaitForChild("ninjaEvent"):FireServer(unpack(args))
+wait(0.01)
+end
+    end)
+    
+        md:Toggle("自动购买剑", "", false, function(Value)
+autobuyswords = Value
+        if autobuyswords then
+            buyswords()
+        end
+    end)
+    
+    md:Toggle("自动购买腰带", "", false, function(Value)
+autobuybelts = Value
+        if autobuybelts then
+            buybelts()
+        end
+    end)
+    
+    md:Toggle("自动购买忍术不建议开", "", false, function(state)
+autobuyskill = Value
+        if autobuyskill then
+            buyskill()
+        end
+    end)
+    
+    md:Toggle("自动购买称号", "", false, function(Value)
+autobuyranks = Value
+        if autobuyranks then
+            buyranks()
+        end
+    end)
+    
+    md:Toggle("自动购买全部推荐不开", "", false, function(Value)
+autobuyshurikens = Value
+        if autobuyshurikens then
+            buyshurikens()
+        end
+    end)
+    
+    md:Toggle("自动售卖", "", false, function(Value)
+autosell = Value
+        if autosell then
+            selling()
+        end
+    end)
+    
+    md:Toggle("满了自动卖", "", false, function(Value)
+autosellmax = Value
+        if autosellmax then
+            maxsell()
+        end
+    end)
+    
+md:Textbox("设置跳跃次数", "", "输入", function(Value)
+	game.Players.LocalPlayer.multiJumpCount.Value=Value
+    end)
+    
+md:Slider("设置跳跃次数", "", 1, 0, 1000, false, function(Value)
+game.Players.LocalPlayer.multiJumpCount.Value=Value
+    end)
+    
+    md:Button(
+        "解锁所有岛屿",
+        function()
+           for _, v in next, game.workspace.islandUnlockParts:GetChildren() do
+            if v then
+                game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.islandSignPart.CFrame
+                wait(.5)
+            end
+        end 
+        end)
+        
+    md:Button(
+        "传送附魔岛",
+        function()
+            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(83.028564453125, 766.3915405273438, -128.62686157226562)
+        end)
+        
+    md:Button(
+        "传送星界岛",
+        function()
+          game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(144.43006896972656, 2014.091064453125, 247.5571746826172)  
+        end)
+        
+    md:Button(
+        "传送神秘岛",
+        function()
+          game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(162.7420654296875, 4047.7841796875, 13.378257751464844)  
+        end)
+        
+    md:Button(
+        "传送太空岛",
+        function()
+            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(184.0364227294922, 5657.091796875, 161.54000854492188)
+        end)
+        
+    md:Button(
+        "传送冻土岛",
+        function()
+            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(186.7508544921875, 9285.08984375, 158.16287231445312)
+        end)
+        
+    md:Button(
+        "传送沙暴岛",
+        function()
+            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(183.7511749267578, 17686.236328125, 147.5008087158203)
+        end)
+        
+    md:Button(
+        "传送雷暴岛",
+        function()
+            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(186.87640380859375, 24069.9296875, 158.25582885742188)
+        end)
+        
+    md:Button(
+        "传送远古炼狱岛",
+        function()
+            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(166.48052978515625, 28256.201171875, 160.25828552246094)
+        end)
+        
+    md:Button(
+        "传送到午夜暗影岛",
+        function()
+            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(182.76388549804688, 33206.88671875, 136.66305541992188)
+        end)
+        
+    md:Button(
+        "传送到神秘灵魂岛",
+        function()
+           game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(157.39967346191406, 39317.4765625, 146.05630493164062) 
+        end)
+        
+    md:Button(
+        "传送冬季奇迹岛",
+        function()
+           game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(168.73797607421875, 46010.4609375, 158.589599609375) 
+        end)
+        
+    md:Button(
+        "传送到黄金大师岛",
+        function()
+           game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(184.56202697753906, 52607.671875, 166.47279357910156) 
+        end)
+        
+    md:Button(
+        "传送龙传奇岛",
+        function()
+            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(166.83065795898438, 59594.58984375, 150.16586303710938)
+        end)
+        
+    md:Button(
+        "传送赛博传奇岛",
+        function()
+            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(167.66766357421875, 66669.0703125, 142.27223205566406)
+        end)
+        
+    md:Button(
+        "传送天岚超能岛",
+        function()
+            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(182.09237670898438, 70271.0625, 157.14857482910156)
+        end)
+        
+    md:Button(
+        "传送到混沌传奇岛",
+        function()
+            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(177.88784790039062, 74442.7578125, 143.346435546875)
+        end)
+        
+    md:Button(
+        "传送到灵魂融合岛",
+        function()
+            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(183.39129638671875, 79746.890625, 163.01148986816406)
+        end)
+        
+    md:Button(
+        "传送到黑暗元素岛",
+        function()
+           game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(169.4972381591797, 83198.890625, 170.53890991210938) 
+        end)
+        
+    md:Button(
+        "传送到禅心岛",
+        function()
+          game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(173.4744873046875, 87050.9765625, 141.89602661132812)  
+        end)
+        
+    md:Button(
+        "传送到炽热漩涡之岛",
+        function()
+            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(178.33023071289062, 91245.96875, 152.53775024414062)
+        end)
+        
+   local XKHub = window:Tab("99天", "118120943273583")
+    local JIUJIU = XKHub:section("99天脚本", true)
+    
+   JIUJIU:Button(
+        "虚空汉化",
+        function()
+            loadstring(game:HttpGet("https://raw.githubusercontent.com/ke9460394-dot/ugik/refs/heads/main/99%E5%A4%9C%E8%99%9A%E7%A9%BA.txt"))()
+        end)
+        
+   local XKHub = window:Tab("俄亥俄州", "118120943273583")
+    local CNM = XKHub:section("俄亥俄州脚本", true)
+    
+   CNM:Button(
+        "普通版熊脚本",
+        function()
+            loadstring(game:HttpGet("https://raw.githubusercontent.com/Bear-script0/OHIO/main/%E7%86%8A%E8%84%9A%E6%9C%AC%E6%99%AE%E9%80%9A%E7%89%88"))()
+        end)
+      
